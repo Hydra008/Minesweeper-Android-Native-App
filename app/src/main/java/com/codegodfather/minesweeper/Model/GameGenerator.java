@@ -18,12 +18,11 @@ public class GameGenerator {
     public int[][] createGame() {
         grid = new int[gridSize][gridSize];
         RandomBombAssigner();
-        calculateNeighbours();
-        printGrid();
+        printGrid(grid);
         return grid;
     }
 //Randomly Assigning bomb as -1
-    private void RandomBombAssigner() {
+    private int[][] RandomBombAssigner() {
         int numberOfBomb = 0 ;
         int xCoordinate;
         int yCoordinate;
@@ -38,13 +37,15 @@ public class GameGenerator {
                 numberOfBomb++;
             }
         }
+        grid = calculateNeighbours(grid);
+        return grid;
 
     }
     //calculating weight for each cell in grid
-    public int[][] calculateNeighbours() {
-        for(int i=0;i<gridSize-1;i++)
+    private int[][] calculateNeighbours(int[][] grid) {
+        for(int i=0;i<=gridSize-1;i++)
         {
-            for(int j=0;j<gridSize-1;j++)
+            for(int j=0;j<=gridSize-1;j++)
             {
                 grid[i][j]=calculateHints(grid,i,j);
             }
@@ -60,14 +61,112 @@ public class GameGenerator {
         else
         {
             int count =0;
-            topLeft(count,grid,i,j);
-            top(count,grid,i,j);
+            count =count+ topLeft(grid,i,j);
+            count =count + top(grid,i,j);
+            count =count + topRight(grid,i,j);
+            count =count + left(grid,i,j);
+            count =count + right(grid,i,j);
+            count =count + bottomLeft(grid,i,j);
+            count =count + bottom(grid,i,j);
+            count =count +  bottomRight(grid,i,j);
             return count;
         }
 
     }
 
-    private int top(int count, int[][] grid, int i, int j) {
+    private int bottomRight(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i+1;
+        int yCoordinate = j-1;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+
+            }
+        }
+
+        return count;
+    }
+
+    private int bottom(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i;
+        int yCoordinate = j-1;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int bottomLeft(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i-1;
+        int yCoordinate = j-1;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int right(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i+1;
+        int yCoordinate = j;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int left(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i-1;
+        int yCoordinate = j;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int topRight(final int[][] grid, int i, int j) {
+        int count = 0;
+        int xCoordinate = i+1;
+        int yCoordinate = j+1;
+        if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
+        {
+            if(grid[xCoordinate][yCoordinate]==-1)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private int top( final int[][] grid, int i, int j) {
+        int count = 0;
         int xCoordinate = i;
         int yCoordinate = j+1;
         if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
@@ -77,11 +176,11 @@ public class GameGenerator {
                 count++;
             }
         }
-
         return count;
     }
 
-    private int topLeft(int count,final int[][] grid,int i, int j) {
+    private int topLeft(final int[][] grid,int i, int j) {
+        int count = 0;
         int xCoordinate = i-1;
         int yCoordinate = j+1;
         if(xCoordinate>=0  && xCoordinate<gridSize  && yCoordinate>=0 && yCoordinate<gridSize)
@@ -91,12 +190,11 @@ public class GameGenerator {
                 count++;
             }
         }
-
         return count;
     }
 
 
-    public void printGrid() {
+    public void printGrid(final int [][]grid) {
         for (int i = 0;i<gridSize;i++)
         {
             for(int j=0;j<gridSize;j++)
@@ -106,6 +204,4 @@ public class GameGenerator {
             }
         }
     }
-
-
 }
